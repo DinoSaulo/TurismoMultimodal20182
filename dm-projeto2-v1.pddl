@@ -28,4 +28,10 @@
 ; Maria = EsAf ;
 ; José = EsCAP ;
 
-(define )
+(define (domain recife)
+ (:requirements :strips)
+ (:predicates
+   (at ?EsPR ?EsCAP)
+ )
+
+)
