@@ -6,7 +6,7 @@ Disciplina ministrada pelo Prof. Dr. Sergio Ricardo de Melo Queiroz
 ## Iniciando
 
 O objetivo deste projeto é uma simulação de trajeto de roteiros de percursos de bicicletas provido de uma história ficticea.
-A descrição e os parâmetros do projeto encontra-se [Aqui](https://classroom.google.com/u/1/c/MTYwNjUzNDA4MDda/a/MjI1ODQ5MzQ5MTFa/details)
+A descrição e os parâmetros do projeto encontra-se [Aqui](turismomultimodal-ApresentaçãoProjeto.pdf)
 
 
 ### pré-requisitos
