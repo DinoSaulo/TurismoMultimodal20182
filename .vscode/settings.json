@@ -1,0 +1,4 @@
+{
+    "pddlParser.executableOrService": "PDDL parser/validator",
+    "pddlParser.executableOptions": "$(parser) $(domain) $(problem)"
+}
