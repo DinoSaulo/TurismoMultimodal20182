@@ -7,7 +7,7 @@ Disciplina ministrada pelo Prof. Dr. Sergio Ricardo de Melo Queiroz
 
 O objetivo deste projeto é uma simulação de trajeto de roteiros de percursos de bicicletas provido de uma história ficticea.
 A descrição e os parâmetros do projeto encontra-se [AQUI](turismomultimodal-ApresentaçãoProjeto.pdf)
-Documentação do PDDL divulgada pelo professor: [Writing Planning Domains and Problems in PDDL](Writing Planning Domains and Problems in PDDL.pdf)
+Documentação do PDDL divulgada pelo professor: [Writing Planning Domains and Problems in PDDL](WritingPlanningDomainsAndProblemsInPDDL.pdf)
 
 
 ### pré-requisitos
