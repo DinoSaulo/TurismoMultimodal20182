@@ -28,10 +28,39 @@
 ; Maria = EsAf ;
 ; José = EsCAP ;
 
-(define (domain recife)
+; Grafo do mapa: ;
+; EsPR -> EsCAP, EsPD ;
+; EsCAP -> EsPR, EsAf ;
+; EsPD -> EsPR, EsMSJ, EsSR ;
+; EsAf -> EsCAP ;
+; EsMSJ == EsSR, EsPD;
+; EsSR == EsMSJ, EsPD, EsAf ;
+
+(define (domain recife-c)
  (:requirements :strips)
- (:predicates
-   (at ?EsPR ?EsCAP)
+
+ (:action pega-bicicleta
+   :parameters (?quem ?de ?para)
+   :precondition (and (eh-ciclista ?quem))
+   
+ )
+
+ (:action anda-na-bicicleta
+   :parameters (?quem ?de ?para)
+   :precondition (and (eh-ciclista ?quem))
+   
+ )
+
+ (:action caminha
+   :parameters (?quem ?de ?para)
+   :precondition (and (eh-ciclista ?quem))
+   
+ )
+
+ (:action espera-5min
+   :parameters (?quem ?de ?para)
+   :precondition (and (eh-ciclista ?quem))
+   
  )
 
 )
