@@ -38,6 +38,9 @@
 
 (define (domain recife-c)
  (:requirements :strips)
+ (:predicates
+  (eh-ciclista ?quem)
+ )
 
  (:action pega-bicicleta
    :parameters (?quem ?de ?para)
@@ -60,7 +63,7 @@
  (:action espera-5min
    :parameters (?quem ?de ?para)
    :precondition (and (eh-ciclista ?quem))
-   
+
  )
 
 )

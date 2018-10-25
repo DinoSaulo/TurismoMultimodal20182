@@ -1,10 +1,11 @@
 (define (problem recife-c)
   (:domain recife-c)
-  (:objects sq-1-1 sq-1-2 sq-1-3
-	    sq-2-1 sq-2-2 sq-2-3
-	    the-gold the-arrow
-	    agent wumpus)
-  (:init (adj sq-1-1 sq-1-2) (adj sq-1-2 sq-1-1)
+  (:objects EsPR EsCAP EsPD EsAf EsMSJ EsSR
+		Bicicleta1 Bicicleta2 Bicicleta3 Bicicleta4 Bicicleta5
+		Bicicleta6 Bicicleta7 Bicicleta8
+		agent Maria Jose Joao
+	    agent ciclista)
+  (:init (adj EsCAP EsAf) (adj EsAf EsCAP)
 	 (adj sq-1-2 sq-1-3) (adj sq-1-3 sq-1-2)
 	 (adj sq-2-1 sq-2-2) (adj sq-2-2 sq-2-1)
 	 (adj sq-2-2 sq-2-3) (adj sq-2-3 sq-2-2)
