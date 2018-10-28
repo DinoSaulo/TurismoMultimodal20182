@@ -14,7 +14,8 @@
   (bicicleta-em-estacao ?qual ?onde)
   (bicicleta-com-ciclista ?qual ?comquem)
   (pode-pegar-bicicleta ?quem)
- )
+  (meia-hora ?de-que-est ?para-qual-est)
+  (pronto-pra-pedalar ?quem))
 
  (:action pega-bicicleta
    :parameters (?quem ?qual-est ?qual-bike)
@@ -22,14 +23,13 @@
           (eh-bicicleta ?qual-bike)
           (eh-estacao ?qual-est)
           (ciclista-em-estacao ?quem ?qual-est)
-          (not(ciclista-com-bicicleta ?quem))
+          (not (ciclista-com-bicicleta ?quem))
           (bicicleta-em-estacao ?qual-bike ?qual-est)
-          (pode-pegar-bicicleta ?quem)
-   )
+          (pode-pegar-bicicleta ?quem))
    :effect (and (not (bicicleta-em-estacao ?qual-bike ?qual-est))
    (bicicleta-com-ciclista ?qual-bike ?quem)
-   (ciclista-com-bicicleta ?quem))
-  )
+   (ciclista-com-bicicleta ?quem)
+   (pronto-pra-pedalar ?quem)))
 
  (:action entrega-bicicleta
    :parameters (?quem ?qual-bike ?qual-est)
@@ -38,12 +38,12 @@
           (eh-estacao ?qual-est)
           (ciclista-em-estacao ?quem ?qual-est)
           (ciclista-com-bicicleta ?quem)
-          (not(bicicleta-em-estacao ?qual-bike ?qual-est))
-   )
+          (not (bicicleta-em-estacao ?qual-bike ?qual-est))
+          (not (pronto-pra-pedalar ?quem)))
    :effect (and (bicicleta-em-estacao ?qual-bike ?qual-est)
-   (not(bicicleta-com-ciclista ?qual-bike ?quem))
-   (not(ciclista-com-bicicleta ?quem)))
- )
+   (not (bicicleta-com-ciclista ?qual-bike ?quem))
+   (not (ciclista-com-bicicleta ?quem))
+   (not (pode-pegar-bicicleta ?quem))))
 
  (:action espera-5min
    :parameters (?quem ?onde)
@@ -51,10 +51,9 @@
           (eh-estacao ?onde)
           (ciclista-em-estacao ?quem ?onde)
           (not (ciclista-com-bicicleta ?quem))
-          (not (pode-pegar-bicicleta ?quem))
-   )
-   :effect ((pode-pegar-bicicleta ?quem))
- )
+          (not (pronto-pra-pedalar ?quem))
+          (not (pode-pegar-bicicleta ?quem)))
+   :effect (pode-pegar-bicicleta ?quem))
 
  (:action caminha
    :parameters (?quem ?de-que-est ?para-qual-ponto)
@@ -66,9 +65,8 @@
           (not (ciclista-com-bicicleta ?quem))
           (not (ciclista-em-ponto-de-visita ?quem ?para-qual-ponto))
           (not (ponto-visitado ?quem ?para-qual-ponto)))
-   :effect (and(not(ciclista-em-estacao ?quem ?de-que-est))
-   (ciclista-em-ponto-de-visita ?quem ?para-qual-ponto))
- )
+   :effect (and (not (ciclista-em-estacao ?quem ?de-que-est))
+   (ciclista-em-ponto-de-visita ?quem ?para-qual-ponto)))
 
  (:action visitar-ponto
    :parameters (?quem ?qual-ponto)
@@ -76,8 +74,7 @@
           (eh-ponto-visita ?qual-ponto)
           (ciclista-em-ponto-de-visita ?quem ?qual-ponto)
           (not (ponto-visitado ?quem ?qual-ponto)))
-   :effect ((ponto-visitado ?quem ?qual-ponto))
- )
+   :effect (ponto-visitado ?quem ?qual-ponto))
 
  (:action pedalar
    :parameters (?quem ?de-que-est ?para-qual-est)
@@ -87,11 +84,11 @@
           (eh-adjacente ?de-que-est ?para-qual-est)
           (ciclista-em-estacao ?quem ?de-que-est)
           (ciclista-com-bicicleta ?quem)
+          (pronto-pra-pedalar ?quem)
+          (not (meia-hora ?de-que-est ?para-qual-est))
           (not (ciclista-em-estacao ?quem ?para-qual-est)))
    :effect (and (not (ciclista-em-estacao ?quem ?de-que-est))
    (ciclista-em-estacao ?quem ?para-qual-est)
-   (not (pode-pegar-bicicleta ?quem))
-   (not (ciclista-com-bicicleta ?quem)))
- )
-
+   (meia-hora ?de-que-est ?para-qual-est)
+   (not (pronto-pra-pedalar ?quem))))
 )
