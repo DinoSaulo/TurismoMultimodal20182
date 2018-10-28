@@ -1,69 +1,97 @@
-; Estações ;
-; Praça da República == EsPR ;
-; Cais do Apolo == EsCAP ;
-; Praça do Diário = EsPD ;
-; Alfândega = EsAf ;
-; Mercado São José = EsMSJ ;
-; Santa Rita = EsSR ;
-
-; Lotação inicial: ;
-; EsPR == 1 ;
-; EsCAP == 1 ;
-; EsPD == 1 ;
-; EsAf == 0 ;
-; EsMSJ == 2 ;
-; EsSR == 3 ;
-
-; Amigos: ;
-; José, Maria & José ;
-
-; Trajetos: ;
-; João: EsCAP -> EsAf ;
-; José: EsPR & EsMSJ (tanto faz a ordem) ;
-; Maria: EsPD & EsMSJ (tanto faz a ordem) ;
-; José e Maria combinaram de se encontrar no Mercado São José, então o primeiro que chegar lá vai ficar esperando o outro chegar para visitarem o Mercado,
-
-; Lacal de Inicio: ;
-; João = EsPD ; 
-; Maria = EsAf ;
-; José = EsCAP ;
-
-; Grafo do mapa: ;
-; EsPR -> EsCAP, EsPD ;
-; EsCAP -> EsPR, EsAf ;
-; EsPD -> EsPR, EsMSJ, EsSR ;
-; EsAf -> EsCAP ;
-; EsMSJ == EsSR, EsPD;
-; EsSR == EsMSJ, EsPD, EsAf ;
-
 (define (domain recife-c)
  (:requirements :strips)
  (:predicates
   (eh-ciclista ?quem)
+  (eh-estacao ?qual)
+  (eh-bicicleta ?qual)
+  (eh-ponto-visita ?qual)
+  (eh-adjacente ?est1 ?est2)
+  (eh-ponto-visita-prox ?qualponto ?qualest)
+  (ciclista-em-estacao ?quem ?onde)
+  (ciclista-em-ponto-de-visita ?quem ?onde)
+  (ponto-visitado ?quem ?qual-ponto)
+  (ciclista-com-bicicleta ?quem)
+  (bicicleta-em-estacao ?qual ?onde)
+  (bicicleta-com-ciclista ?qual ?comquem)
+  (pode-pegar-bicicleta ?quem)
  )
 
  (:action pega-bicicleta
-   :parameters (?quem ?de ?para)
-   :precondition (and (eh-ciclista ?quem))
-   
- )
+   :parameters (?quem ?qual-est ?qual-bike)
+   :precondition (and (eh-ciclista ?quem)
+          (eh-bicicleta ?qual-bike)
+          (eh-estacao ?qual-est)
+          (ciclista-em-estacao ?quem ?qual-est)
+          (not(ciclista-com-bicicleta ?quem))
+          (bicicleta-em-estacao ?qual-bike ?qual-est)
+          (pode-pegar-bicicleta ?quem)
+   )
+   :effect (and (not (bicicleta-em-estacao ?qual-bike ?qual-est))
+   (bicicleta-com-ciclista ?qual-bike ?quem)
+   (ciclista-com-bicicleta ?quem))
+  )
 
- (:action anda-na-bicicleta
-   :parameters (?quem ?de ?para)
-   :precondition (and (eh-ciclista ?quem))
-   
- )
-
- (:action caminha
-   :parameters (?quem ?de ?para)
-   :precondition (and (eh-ciclista ?quem))
-   
+ (:action entrega-bicicleta
+   :parameters (?quem ?qual-bike ?qual-est)
+   :precondition (and (eh-ciclista ?quem)
+          (eh-bicicleta ?qual-bike)
+          (eh-estacao ?qual-est)
+          (ciclista-em-estacao ?quem ?qual-est)
+          (ciclista-com-bicicleta ?quem)
+          (not(bicicleta-em-estacao ?qual-bike ?qual-est))
+   )
+   :effect (and (bicicleta-em-estacao ?qual-bike ?qual-est)
+   (not(bicicleta-com-ciclista ?qual-bike ?quem))
+   (not(ciclista-com-bicicleta ?quem)))
  )
 
  (:action espera-5min
-   :parameters (?quem ?de ?para)
-   :precondition (and (eh-ciclista ?quem))
+   :parameters (?quem ?onde)
+   :precondition (and (eh-ciclista ?quem)
+          (eh-estacao ?onde)
+          (ciclista-em-estacao ?quem ?onde)
+          (not (ciclista-com-bicicleta ?quem))
+          (not (pode-pegar-bicicleta ?quem))
+   )
+   :effect ((pode-pegar-bicicleta ?quem))
+ )
 
+ (:action caminha
+   :parameters (?quem ?de-que-est ?para-qual-ponto)
+   :precondition (and (eh-ciclista ?quem)
+          (eh-estacao ?de-que-est)
+          (eh-ponto-visita ?para-qual-ponto)
+          (ciclista-em-estacao ?quem ?de-que-est)
+          (eh-ponto-visita-prox ?para-qual-ponto ?de-que-est)
+          (not (ciclista-com-bicicleta ?quem))
+          (not (ciclista-em-ponto-de-visita ?quem ?para-qual-ponto))
+          (not (ponto-visitado ?quem ?para-qual-ponto)))
+   :effect (and(not(ciclista-em-estacao ?quem ?de-que-est))
+   (ciclista-em-ponto-de-visita ?quem ?para-qual-ponto))
+ )
+
+ (:action visitar-ponto
+   :parameters (?quem ?qual-ponto)
+   :precondition (and (eh-ciclista ?quem)
+          (eh-ponto-visita ?qual-ponto)
+          (ciclista-em-ponto-de-visita ?quem ?qual-ponto)
+          (not (ponto-visitado ?quem ?qual-ponto)))
+   :effect ((ponto-visitado ?quem ?qual-ponto))
+ )
+
+ (:action pedalar
+   :parameters (?quem ?de-que-est ?para-qual-est)
+   :precondition (and (eh-ciclista ?quem)
+          (eh-estacao ?de-que-est)
+          (eh-estacao ?para-qual-est)
+          (eh-adjacente ?de-que-est ?para-qual-est)
+          (ciclista-em-estacao ?quem ?de-que-est)
+          (ciclista-com-bicicleta ?quem)
+          (not (ciclista-em-estacao ?quem ?para-qual-est)))
+   :effect (and (not (ciclista-em-estacao ?quem ?de-que-est))
+   (ciclista-em-estacao ?quem ?para-qual-est)
+   (not (pode-pegar-bicicleta ?quem))
+   (not (ciclista-com-bicicleta ?quem)))
  )
 
 )
